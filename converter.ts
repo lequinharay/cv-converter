@@ -380,6 +380,27 @@ function t(n: number): string {
 }
 
 /**
+ * ヘルプメッセージの表示
+ */
+function showHelp(): void {
+  console.log(`
+使用方法:
+  npx ts-node converter.ts [options] [input.md] [output.html]
+
+引数:
+  input.md              変換対象のマークダウンファイル (デフォルト: input.md)
+  output.html           出力先のHTMLファイル (デフォルト: output.html)
+
+オプション:
+  -i, --indent <num|tab> インデントを指定します (デフォルト: 4)
+                        ・数値 (例: -i 2) : 指定した個数のスペース
+                        ・'tab' (例: -i tab) : タブ文字 (\\t)
+  -v, --verbose         AST構造のログを出力します
+  -h, --help            ヘルプメッセージを表示します
+`);
+}
+
+/**
  * CLI引数の解析処理
  */
 function parseArgs(args: string[]): {
@@ -393,7 +414,10 @@ function parseArgs(args: string[]): {
   for (let i = 0; i < args.length; i++) {
     const arg = args[i];
 
-    if (arg === '--verbose' || arg === '-v') {
+    if (arg === '--help' || arg === '-h') {
+      showHelp();
+      process.exit(0);
+    } else　if (arg === '--verbose' || arg === '-v') {
       verbose = true;
     } else if (arg === '--indent' || arg === '-i') {
       const val = args[++i]; // 次の要素を値として取得
